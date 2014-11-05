@@ -1,0 +1,28 @@
+{
+  "name": "angular-canvas-paint",
+  "version": "0.0.0",
+  "authors": [
+    "Philipp Wambach <philippwambach@gmail.com>"
+  ],
+  "description": "Angular module to easily paint on a canvas with mouse or touch devices",
+  "main": "dist/pwCanvasPaint.js",
+  "keywords": [
+    "angular",
+    "canvas",
+    "directive",
+    "paint",
+    "draw",
+    "touch"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.1"
+  }
+}
