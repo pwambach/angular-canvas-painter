@@ -5,67 +5,76 @@
 angular.module('pwPaint')
   .directive('pwCanvas', function () {
     return {
+      restrict: 'AE',
       scope: {
-      	undoEnabled: '=',
       	options: '='
       },
-      template: '<div style="position:relative">' +
+      template: '<div class="pwCanvasPaint" style="position:relative">' +
       			'<canvas id="pwCanvasMain"></canvas>' + 
       			'<canvas id="pwCanvasTmp" style="position:absolute;top:0;left:0"></canvas>' +
       			'</div>',
       link: function postLink(scope, el, attrs) {
 
-      		//ios check
-      		var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+      		//set default options
+      		var options = scope.options
+      		options.width = options.width || 400;
+      		options.height = options.height || 300;
+      		options.backgroundColor = options.backgroundColor || '#fff';
+      		options.color = options.color || '#000';
+      		options.undoEnabled = options.undoEnabled || false;
+      		options.opacity = options.opacity || 0.9;
+      		options.lineWidth = options.lineWidth || 1;
 
-      		var undoImage = [];
+      		//create canvas and context
+      		var canvas = document.getElementById('pwCanvasMain');
+      		var canvasTmp = document.getElementById('pwCanvasTmp');
+      		var ctx = canvas.getContext('2d');
+      		var ctxTmp = canvasTmp.getContext('2d');
 
-	      	//create canvas
-	        var canvas = document.getElementById('pwCanvasMain');
-	        if(scope.options.width && scope.options.height){
-      			canvas.width = scope.options.width;
-      			canvas.height = scope.options.height;
-      		}
-
-	        var ctx = canvas.getContext('2d');
-	        //white background color;
-	        ctx.fillStyle = 'white';
-	        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-	        //create tmp canvas
-	        var canvasTmp = document.getElementById('pwCanvasTmp');
-			canvasTmp.width = canvas.width;
-			canvasTmp.height = canvas.height;
-			//el.append(canvasTmp);
-			var ctxTmp = canvasTmp.getContext('2d');
-
-			//set alpha value
-			ctxTmp.globalAlpha = 0.92;
-
-			//init variables
-			var point = {x: 0, y: 0};
+      		//inti variables
+      		var point = {x: 0, y: 0};
 			var ppts = [];
 
-			//Default stroke color and width
-			ctxTmp.lineJoin = 'round';
-			ctxTmp.lineCap = 'round';
+			//ios check
+			var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+			
+			//var undoImage = [];
+
+	      	//set canvas size
+      		canvas.width = canvasTmp.width = options.width;
+      		canvas.height = canvasTmp.height = options.height;
+
+      		//set context style
+	        ctx.fillStyle = options.backgroundColor;
+	        ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctxTmp.globalAlpha = options.opacity;
+			ctxTmp.lineJoin = ctxTmp.lineCap = 'round';
 			ctxTmp.lineWidth = 10;
-			ctxTmp.strokeStyle = 'blue';
-
-/*			scope.$watch('lineWidth', function(newValue){
-				ctxTmp.lineWidth = newValue;
+			ctxTmp.strokeStyle = options.color;
+			
+			
+			//Watch options
+			scope.$watch('options.lineWidth', function(newValue){
+				if(newValue && typeof newValue === 'number'){
+					ctxTmp.lineWidth = options.lineWidth = newValue;
+				}
 			});
-*/
 
-/*
-			scope.$watch('strokeStyle', function(newValue){
-				ctxTmp.strokeStyle = newValue;
-				ctxTmp.fillStyle = newValue;
-				ctx.fillStyle = newValue;
+			scope.$watch('options.strokeStyle', function(newValue){
+				if(newValue){
+					//ctx.fillStyle = newValue;	
+					ctxTmp.strokeStyle = ctxTmp.fillStyle = newValue;
+				}
 			});
-*/
 
-			scope.clearCanvas = function(){
+			scope.$watch('options.opacity', function(newValue){
+				if(newValue){
+					ctxTmp.globalAlpha = newValue;
+				}
+			});
+
+
+			var clearCanvas = function(){
 				ctx.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
 				ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
 			}
@@ -82,6 +91,16 @@ angular.module('pwPaint')
 				// Return our Blob object
 				//scope.image = new Blob([new Uint8Array(array)], {type: 'image/png'});
 				return new Blob([new Uint8Array(array)], {type: 'image/png'});
+			}
+*/
+
+/*
+			scope.undo = function(){
+				if(undoImage.length > 0)
+					ctx.putImageData(undoImage.pop(), 0, 0);
+				
+				if(undoImage.length < 1)
+					scope.undoDisabled = true;
 			}
 */
 
@@ -216,16 +235,6 @@ angular.module('pwPaint')
 				ctxTmp.stroke();
 			}
 			initListeners();
-
-/*
-			scope.undo = function(){
-				if(undoImage.length > 0)
-					ctx.putImageData(undoImage.pop(), 0, 0);
-				
-				if(undoImage.length < 1)
-					scope.undoDisabled = true;
-			}
-*/
-      } //end link function
+      }
     };
   });

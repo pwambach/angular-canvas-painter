@@ -6,21 +6,28 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, height=device-height">
     <link rel="stylesheet" href="css/main.css">
+
+    <style>
+      .container {
+        width: 400px;
+        margin: 100px auto 0 auto;
+      }
+      .pwCanvasPaint canvas:first-child {
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+        -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+      }
+    </style>
   </head>
   <body>
-    <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
 
-    <div pw-canvas options="{width: 400, height: 300}"></div>
-
+    <div class="container">
+      <div pw-canvas options="{width: 400, height: 300}">
+    </div>
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    
     <script type="text/javascript" src="js/pwPaint.js"></script>
     <script type="text/javascript" src="js/pwCanvas.js"></script>
     <script type="text/javascript" src="js/pwColorSelector.js"></script>
-
     <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
