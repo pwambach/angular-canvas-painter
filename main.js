@@ -1,6 +1,3 @@
 'use strict';
 
-angular.module('PaintDemo', ['pwPaint'])
-.run(function(){
-	
-});
+angular.module('PaintDemo', ['pwPaint']);
