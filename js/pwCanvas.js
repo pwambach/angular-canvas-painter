@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('pwPaint')
+angular.module('pwCanvasPaint')
   .directive('pwCanvas', function () {
     return {
       restrict: 'AE',
@@ -60,7 +60,7 @@ angular.module('pwPaint')
 				}
 			});
 
-			scope.$watch('options.strokeStyle', function(newValue){
+			scope.$watch('options.color', function(newValue){
 				if(newValue){
 					//ctx.fillStyle = newValue;	
 					ctxTmp.strokeStyle = ctxTmp.fillStyle = newValue;

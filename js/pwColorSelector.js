@@ -2,37 +2,27 @@
 
 'use strict';
 
-angular.module('pwPaint')
+angular.module('pwCanvasPaint')
   .directive('pwColorSelector', function () {
     return {
-      restrict: 'A',
+      restrict: 'AE',
+      replace: true,
+      scope: {
+        colorList: '=pwColorSelector',
+        color: '='
+      },
+      template: '<ul class="pwColorSelector">' +
+                '<li ng-repeat="color in colorList track by $index"' +
+                    'class="pwColor"' +
+                    'ng-class="{\'active\': selectedIndex === $index}"' +
+                    'style="background-color: {{color}}"' +
+                    'ng-click="select($index, color)"></li>' +
+                '</ul>',
       link: function postLink(scope, element, attrs) {
-        var possibilities = ['#101624', '#2F3942', '#F2E5D5', '#ffffff', '#C1B0A3', '#736B68', '#517792', '#4AC3F1', '#45B29D', '#91DA63', '#EFC94C', '#E27A3F', '#DF5A49', '#FE4365'];
-        var list = $("<ul class='ColorList'></ul>");
-
-        $.each(possibilities, function(index, value){
-        	var el = $('<li></li>');
-
-          if(index == 0){
-            scope.strokeStyle = value;
-          }
-        	
-        	el.css('background-color', value);
-        	
-        	el.on('click', function(){
-            $('.ColorList li').removeClass('Active');
-            $(this).addClass('Active');
-        		
-            scope.$apply(function(){
-        			scope.strokeStyle = value;
-        		});
-
-        	});
-
-        	list.append(el);
-        });
-
-        element.append(list);
+        scope.select = function(index, color){
+          scope.selectedIndex = index;
+          scope.color = color;
+        };
       }
     };
   });

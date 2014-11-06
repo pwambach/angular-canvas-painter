@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('PaintDemo', ['pwPaint']);
+angular.module('PaintDemo', ['pwCanvasPaint']);
