@@ -15,6 +15,8 @@ angular.module('pwCanvasPaint')
       			'</div>',
       link: function postLink(scope, el, attrs) {
 
+      		var isTouch = 'ontouchstart' in document.documentElement;
+
       		//set default options
       		var options = scope.options
       		options.width = options.width || 400;
@@ -105,7 +107,7 @@ angular.module('pwCanvasPaint')
 */
 
 			var initListeners = function(){
-				if(true || !Modernizr.touch){
+				if(!isTouch){
 					//Mouse
 					window.addEventListener('mouseup', function(){
 						canvasTmp.removeEventListener('mousemove', mousePaint, false);
@@ -118,8 +120,8 @@ angular.module('pwCanvasPaint')
 						e.preventDefault();
 						canvasTmp.addEventListener('mousemove', mousePaint, false);
 						
-						point.x = typeof e.offsetX !== 'undefined' ? e.offsetX : e.layerX;
-						point.y = typeof e.offsetY !== 'undefined' ? e.offsetY : e.layerY;
+						point.x = e.offsetX !== undefined ? e.offsetX : e.layerX;
+						point.y = e.offsetY !== undefined ? e.offsetY : e.layerY;
 						ppts.push({x: point.x, y: point.y});
 						ppts.push({x: point.x, y: point.y});
 
