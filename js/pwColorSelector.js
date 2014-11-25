@@ -1,8 +1,6 @@
-/* Author: Philipp Wambach (http://github.com/pwambach) */
-
 'use strict';
 
-angular.module('pwCanvasPaint')
+angular.module('canvas-painter')
   .directive('pwColorSelector', function () {
     return {
       restrict: 'AE',
