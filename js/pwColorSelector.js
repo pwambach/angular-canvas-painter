@@ -11,13 +11,7 @@ angular.module('pwCanvasPaint')
         colorList: '=pwColorSelector',
         color: '='
       },
-      template: '<ul class="pwColorSelector">' +
-                '<li ng-repeat="color in colorList track by $index"' +
-                    'class="pwColor"' +
-                    'ng-class="{\'active\': selectedIndex === $index}"' +
-                    'style="background-color: {{color}}"' +
-                    'ng-click="select($index, color)"></li>' +
-                '</ul>',
+      templateUrl: '../templates/color-selector.html', 
       link: function postLink(scope, element, attrs) {
         scope.select = function(index, color){
           scope.selectedIndex = index;

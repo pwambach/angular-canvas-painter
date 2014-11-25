@@ -9,10 +9,7 @@ angular.module('pwCanvasPaint')
       scope: {
       	options: '='
       },
-      template: '<div class="pwCanvasPaint" style="position:relative">' +
-      			'<canvas id="pwCanvasMain"></canvas>' + 
-      			'<canvas id="pwCanvasTmp" style="position:absolute;top:0;left:0"></canvas>' +
-      			'</div>',
+      templateUrl: '../templates/canvas.html', 
       link: function postLink(scope, el, attrs) {
 
       		var isTouch = 'ontouchstart' in document.documentElement;
