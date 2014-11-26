@@ -55,7 +55,7 @@ gulp.task('partials', function() {
 
 gulp.task('build', function() {
   mkdirp('./dist');
-  gulp.src(['js/pwCanvasPaint.js', 'js/pwCanvas.js', 'js/pwColorSelector.js', './.tmp/templates.js'])
+  gulp.src(['./.tmp/templates.js', 'js/pwCanvasPaint.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
     .pipe(ngAnnotate())
     .pipe(concat(pkg.name + '.js'))
     .pipe(header(prefix, { 'pkg' : pkg }))

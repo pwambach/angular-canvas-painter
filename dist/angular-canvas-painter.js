@@ -5,6 +5,30 @@
  * Released under the MIT license.
  */
 (function(window) {
+(function(module) {
+try {
+  module = angular.module('pw.canvas-painter');
+} catch (e) {
+  module = angular.module('pw.canvas-painter', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('canvas.html',
+    '<div class="pwCanvasPaint" style="position:relative"><canvas id="pwCanvasMain"></canvas><canvas id="pwCanvasTmp" style="position:absolute;top:0;left:0"></canvas></div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('pw.canvas-painter');
+} catch (e) {
+  module = angular.module('pw.canvas-painter', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('color-selector.html',
+    '<ul class="pwColorSelector"><li ng-repeat="color in colorList track by $index" class="pwColor" ng-class="{\'active\': selectedIndex === $index}" style="background-color: {{color}}" ng-click="select($index, color)"></li></ul>');
+}]);
+})();
+
 'use strict';
 
 angular.module('pw.canvas-painter', []);
@@ -266,29 +290,5 @@ angular.module('pw.canvas-painter')
       }
     };
   });
-
-(function(module) {
-try {
-  module = angular.module('pw.canvas-painter');
-} catch (e) {
-  module = angular.module('pw.canvas-painter', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('canvas.html',
-    '<div class="pwCanvasPaint" style="position:relative"><canvas id="pwCanvasMain"></canvas><canvas id="pwCanvasTmp" style="position:absolute;top:0;left:0"></canvas></div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('pw.canvas-painter');
-} catch (e) {
-  module = angular.module('pw.canvas-painter', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('color-selector.html',
-    '<ul class="pwColorSelector"><li ng-repeat="color in colorList track by $index" class="pwColor" ng-class="{\'active\': selectedIndex === $index}" style="background-color: {{color}}" ng-click="select($index, color)"></li></ul>');
-}]);
-})();
 
 }(this));
