@@ -1,11 +1,11 @@
 {
-  "name": "angular-canvas-paint",
+  "name": "angular-canvas-painter",
   "version": "0.0.0",
   "authors": [
-    "Philipp Wambach <philippwambach@gmail.com>"
+    "Philipp Wambach"
   ],
   "description": "Angular module to easily paint on a canvas with mouse or touch devices",
-  "main": "dist/pwCanvasPaint.js",
+  "main": "dist/angular-canvas-painter.js",
   "keywords": [
     "angular",
     "canvas",

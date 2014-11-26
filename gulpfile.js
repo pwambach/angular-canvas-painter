@@ -14,7 +14,7 @@ var concat = require('gulp-concat');
 
 
 var pkg = require('./package.json');
-var name = 'canvas-painter';
+var module_name = 'pw.canvas-painter';
 
 
 mkdirp('./dist');
@@ -42,7 +42,7 @@ gulp.task('partials', function() {
         quotes: true
       }))
     .pipe(ngHtml2js({
-      moduleName: name
+      moduleName: module_name
     }))
     .pipe(concat('templates.js'))
     .pipe(gulp.dest('./.tmp'));

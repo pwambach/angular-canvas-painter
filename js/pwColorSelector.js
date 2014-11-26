@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('canvas-painter')
+angular.module('pw.canvas-painter')
   .directive('pwColorSelector', function () {
     return {
       restrict: 'AE',
