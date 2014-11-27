@@ -44,7 +44,8 @@ gulp.task('partials', function() {
         quotes: true
       }))
     .pipe(ngHtml2js({
-      moduleName: module_name
+      moduleName: module_name,
+      prefix: '../templates/'
     }))
     .pipe(concat('templates.js'))
     .pipe(gulp.dest('./.tmp'));
