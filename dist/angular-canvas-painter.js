@@ -5,6 +5,7 @@
  * Released under the MIT license.
  */
 (function(window) {
+angular.module('pw.canvas-painter', []);
 (function(module) {
 try {
   module = angular.module('pw.canvas-painter');
@@ -29,9 +30,6 @@ module.run(['$templateCache', function($templateCache) {
 }]);
 })();
 
-'use strict';
-
-angular.module('pw.canvas-painter', []);
 'use strict';
 
 angular.module('pw.canvas-painter')
