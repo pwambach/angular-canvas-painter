@@ -27,7 +27,9 @@ var prefix = ['/*!',
   ' * Copyright (c) ' + new Date().getFullYear() + ', <%= pkg.author %>',
   ' * Released under the MIT license.',
   ' */',
+  '\'use strict\';',
   '(function(window) {',
+  'angular.module(\'' + module_name + '\', []);',
   ''].join('\n');
 
 var postfix = '\n}(this));';
@@ -55,7 +57,7 @@ gulp.task('partials', function() {
 
 gulp.task('build', function() {
   mkdirp('./dist');
-  gulp.src(['./.tmp/templates.js', 'js/pwCanvasPaint.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
+  gulp.src(['./.tmp/templates.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
     .pipe(ngAnnotate())
     .pipe(concat(pkg.name + '.js'))
     .pipe(header(prefix, { 'pkg' : pkg }))
