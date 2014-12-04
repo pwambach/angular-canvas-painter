@@ -10,7 +10,7 @@ angular.module('pw.canvas-painter')
       templateUrl: '../templates/canvas.html', 
       link: function postLink(scope, el, attrs) {
 
-        var isTouch = true; // !!('ontouchstart' in window);
+        var isTouch = !!('ontouchstart' in window);
         var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 
         var PAINT_START = isTouch ? 'touchstart' : 'mousedown';
