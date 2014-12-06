@@ -7,8 +7,8 @@ angular.module('pw.canvas-painter')
       scope: {
         options: '='
       },
-      templateUrl: '../templates/canvas.html', 
-      link: function postLink(scope, el, attrs) {
+      templateUrl: '../templates/canvas.html',
+      link: function postLink(scope) {
 
         var isTouch = !!('ontouchstart' in window);
         var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
@@ -18,7 +18,7 @@ angular.module('pw.canvas-painter')
         var PAINT_END = isTouch ? 'touchend' : 'mouseup';
 
         //set default options
-        var options = scope.options
+        var options = scope.options;
         options.width = options.width || 400;
         options.height = options.height || 300;
         options.backgroundColor = options.backgroundColor || '#fff';
@@ -48,10 +48,13 @@ angular.module('pw.canvas-painter')
         ctxTmp.lineJoin = ctxTmp.lineCap = 'round';
         ctxTmp.lineWidth = 10;
         ctxTmp.strokeStyle = options.color;
-      
-      
+
+
         //Watch options
         scope.$watch('options.lineWidth', function(newValue){
+        	if(typeof newValue === 'string'){
+        		newValue = parseInt(newValue, 10);
+        	}
           if(newValue && typeof newValue === 'number'){
             ctxTmp.lineWidth = options.lineWidth = newValue;
           }
@@ -59,7 +62,7 @@ angular.module('pw.canvas-painter')
 
         scope.$watch('options.color', function(newValue){
           if(newValue){
-            //ctx.fillStyle = newValue; 
+            //ctx.fillStyle = newValue;
             ctxTmp.strokeStyle = ctxTmp.fillStyle = newValue;
           }
         });
@@ -71,10 +74,10 @@ angular.module('pw.canvas-painter')
         });
 
 
-        var clearCanvas = function(){
+				/* var clearCanvas = function(){
           ctx.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
           ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
-        };
+        };*/
 
 
         var setPointFromEvent = function(point, e) {
@@ -84,7 +87,7 @@ angular.module('pw.canvas-painter')
               point.y = e.layerY;
             } else {
               point.x = e.changedTouches[0].clientX - e.target.offsetParent.offsetLeft;
-              point.y = e.changedTouches[0].clientY - e.target.offsetParent.offsetTop;  
+              point.y = e.changedTouches[0].clientY - e.target.offsetParent.offsetTop;
             }
           } else {
             point.x = e.offsetX !== undefined ? e.offsetX : e.layerX;
@@ -96,13 +99,13 @@ angular.module('pw.canvas-painter')
         var paint = function (e){
           if(e){
             e.preventDefault();
-            setPointFromEvent(point, e);  
+            setPointFromEvent(point, e);
           }
 
           // Saving all the points in an array
           ppts.push({x: point.x, y: point.y});
-          
-          if (ppts.length == 3) {
+
+          if (ppts.length === 3) {
             var b = ppts[0];
             ctxTmp.beginPath();
             ctxTmp.arc(b.x, b.y, ctxTmp.lineWidth / 2, 0, Math.PI * 2, !0);
@@ -110,19 +113,19 @@ angular.module('pw.canvas-painter')
             ctxTmp.closePath();
             return;
           }
-          
+
           // Tmp canvas is always cleared up before drawing.
           ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
 
           ctxTmp.beginPath();
           ctxTmp.moveTo(ppts[0].x, ppts[0].y);
-          
+
           for (var i = 1; i < ppts.length - 2; i++) {
             var c = (ppts[i].x + ppts[i + 1].x) / 2;
             var d = (ppts[i].y + ppts[i + 1].y) / 2;
             ctxTmp.quadraticCurveTo(ppts[i].x, ppts[i].y, c, d);
           }
-          
+
           // For the last 2 points
           ctxTmp.quadraticCurveTo(
             ppts[i].x,
@@ -141,13 +144,13 @@ angular.module('pw.canvas-painter')
               ctx.drawImage(canvasTmp, 0, 0);
               ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
               ppts = [];
-            }, false);  
+            }, false);
           }
-          
+
           canvasTmp.addEventListener(PAINT_START, function(e) {
             e.preventDefault();
             canvasTmp.addEventListener(PAINT_MOVE, paint, false);
-            
+
             setPointFromEvent(point, e);
             ppts.push({x: point.x, y: point.y});
             ppts.push({x: point.x, y: point.y});
