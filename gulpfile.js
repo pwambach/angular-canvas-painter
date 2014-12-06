@@ -12,6 +12,7 @@ var minifyHtml = require('gulp-minify-html');
 var ngHtml2js = require('gulp-ng-html2js');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
+var replace = require('gulp-replace');
 
 
 var pkg = require('./package.json');
@@ -60,6 +61,7 @@ gulp.task('partials', function() {
 gulp.task('build', function() {
 	mkdirp('./dist');
 	gulp.src(['./.tmp/templates.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
+	  .pipe(replace(/'use strict';/g, ''))
 		.pipe(ngAnnotate())
 		.pipe(concat(pkg.name + '.js'))
 		.pipe(header(prefix, { 'pkg' : pkg }))
