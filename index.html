@@ -38,8 +38,10 @@
   <body>
 
     <div class="container">
-      <div pw-canvas options="{width: 400, height: 300, color: selectedColor}"></div>
+      <div pw-canvas options="{width: 400, height: 300, color: selectedColor, lineWidth: lineWidth}"></div>
       <div pw-color-selector="['#000', '#00f', '#0f0', '#f00']" color="selectedColor"></div>
+      <input type="range" ng-model="lineWidth" max="50">
+      {{lineWidth}}
     </div>
 
 
@@ -47,6 +49,6 @@
     <script type="text/javascript" src="js/pwCanvasModule.js"></script>
     <script type="text/javascript" src="js/pwCanvas.js"></script>
     <script type="text/javascript" src="js/pwColorSelector.js"></script>
-    
+
   </body>
 </html>
