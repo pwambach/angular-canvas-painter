@@ -11,6 +11,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var minifyHtml = require('gulp-minify-html');
 var ngHtml2js = require('gulp-ng-html2js');
 var concat = require('gulp-concat');
+var jshint = require('gulp-jshint');
 
 
 var pkg = require('./package.json');
@@ -22,33 +23,33 @@ mkdirp('./.tmp');
 
 
 var prefix = ['/*!',
-  ' * <%= pkg.name %> - v<%= pkg.version %>',
-  ' *',
-  ' * Copyright (c) ' + new Date().getFullYear() + ', <%= pkg.author %>',
-  ' * Released under the MIT license.',
-  ' */',
-  '\'use strict\';',
-  '(function(window) {',
-  'angular.module(\'' + module_name + '\', []);',
-  ''].join('\n');
+	' * <%= pkg.name %> - v<%= pkg.version %>',
+	' *',
+	' * Copyright (c) ' + new Date().getFullYear() + ', <%= pkg.author %>',
+	' * Released under the MIT license.',
+	' */',
+	'\'use strict\';',
+	'(function(window) {',
+	'angular.module(\'' + module_name + '\', []);',
+	''].join('\n');
 
 var postfix = '\n}(this));';
 
 
 gulp.task('partials', function() {
-  mkdirp('./.tmp');
-  gulp.src(['./templates/*.html'])
-    .pipe(minifyHtml({
-        empty: true,
-        spare: true,
-        quotes: true
-      }))
-    .pipe(ngHtml2js({
-      moduleName: module_name,
-      prefix: '../templates/'
-    }))
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest('./.tmp'));
+	mkdirp('./.tmp');
+	gulp.src(['./templates/*.html'])
+		.pipe(minifyHtml({
+				empty: true,
+				spare: true,
+				quotes: true
+			}))
+		.pipe(ngHtml2js({
+			moduleName: module_name,
+			prefix: '../templates/'
+		}))
+		.pipe(concat('templates.js'))
+		.pipe(gulp.dest('./.tmp'));
 });
 
 
@@ -57,28 +58,37 @@ gulp.task('partials', function() {
  */
 
 gulp.task('build', function() {
-  mkdirp('./dist');
-  gulp.src(['./.tmp/templates.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
-    .pipe(ngAnnotate())
-    .pipe(concat(pkg.name + '.js'))
-    .pipe(header(prefix, { 'pkg' : pkg }))
-    .pipe(footer(postfix))
-    .pipe(gulp.dest('./dist/'));
+	mkdirp('./dist');
+	gulp.src(['./.tmp/templates.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
+		.pipe(ngAnnotate())
+		.pipe(concat(pkg.name + '.js'))
+		.pipe(header(prefix, { 'pkg' : pkg }))
+		.pipe(footer(postfix))
+		.pipe(gulp.dest('./dist/'));
 });
 
 /**
  * Min task
  */
 gulp.task('min', function() {
-  gulp.src('./dist/' + pkg.name + '.js')
-    .pipe(ugifyjs())
-    .pipe(rename(pkg.name + '.min.js'))
-    .pipe(gulp.dest('./dist/'));
+	gulp.src('./dist/' + pkg.name + '.js')
+		.pipe(ugifyjs())
+		.pipe(rename(pkg.name + '.min.js'))
+		.pipe(gulp.dest('./dist/'));
+});
+
+
+/**
+ * Lint task
+ */
+gulp.task('lint', function() {
+	return gulp.src('./js/*.js')
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
 });
 
 
 /**
  * Register tasks
  */
-gulp.task('default', ['partials', 'build']);
-gulp.task('dist', ['partials', 'build', 'min']);
+gulp.task('default', ['lint', 'partials', 'build', 'min']);

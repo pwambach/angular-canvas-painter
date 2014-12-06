@@ -1,0 +1,38 @@
+{
+	"maxerr"        : 50,
+
+	// Enforcing
+	"bitwise"       : true,
+	"camelcase"     : false,
+	"curly"         : true,
+	"eqeqeq"        : true,
+	"forin"         : true,
+	"freeze"        : true,
+	"immed"         : false,
+	"indent"        : 2,
+	"latedef"       : false,
+	"newcap"        : false,
+	"noarg"         : true,
+	"noempty"       : true,
+	"nonbsp"        : true,
+	"nonew"         : false,
+	"plusplus"      : false,
+	"quotmark"      : "single",
+	"undef"         : true,
+	"unused"        : true,
+	"strict"        : true,
+	"maxparams"     : false,
+	"maxdepth"      : false,
+	"maxstatements" : false,
+	"maxcomplexity" : false,
+	"maxlen"        : false,
+	"globalstrict"  : true,
+
+	// Environments
+	"browser"       : true,
+	"devel"         : true,
+
+	"globals": {
+		"angular": true
+	}
+}
