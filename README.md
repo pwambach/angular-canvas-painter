@@ -7,7 +7,7 @@ Angular.js directive to paint on a canvas on desktop or touch devices
 
 ## Usage
 1. `bower install angular-canvas-painter`
-2. Include `canvasPaint(.min).js` from `bower_components/angular-canvas-painter/dist`.
+2. Include `dist/angular-canvas-painter(.min).js` from `bower_components/angular-canvas-painter/dist`.
 5. Add `pw.canvas-painter` as an angular module dependency.
 6. Use the `pw-canvas` directive in your template to create the painting canvas.
 7. Optionally you can use the `pw-color-selector` directive to choose colors from.
