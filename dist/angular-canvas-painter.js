@@ -31,7 +31,7 @@ module.run(['$templateCache', function($templateCache) {
 }]);
 })();
 
-'use strict';
+
 
 angular.module('pw.canvas-painter')
   .directive('pwCanvas', function () {
@@ -203,7 +203,7 @@ angular.module('pw.canvas-painter')
     };
   });
 
-'use strict';
+
 
 angular.module('pw.canvas-painter')
   .directive('pwColorSelector', function () {
