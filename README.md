@@ -41,6 +41,9 @@ To use `pwColorSelector` with `pwCanvas` set the color option in `pwCanvas` to t
 <div pw-color-selector="['#000', '#00f', '#0f0', '#f00']" color="model.myColor"></div>
 ```
 
+## Drawing algorithm
+The drawing algorithm to produce clear and smooth edges is based on a great [article](http://codetheory.in/html5-canvas-drawing-lines-with-smooth-edges/) by Rishabh
+
 
 ## License
 MIT
