@@ -1,54 +1,87 @@
 <!doctype html>
 <html class="no-js" ng-app="pw.canvas-painter">
-  <head>
-    <meta charset="utf-8">
-    <title>AngularJS CanvasPainter</title>
-    <meta name="viewport" content="width=device-width, height=device-height">
+	<head>
+		<meta charset="utf-8">
+		<title>AngularJS CanvasPainter</title>
+		<meta name="viewport" content="width=device-width, height=device-height">
 
-    <style>
-      body {
-        background-color: #efeeee;
-      }
-      .container {
-        width: 400px;
-        margin: 100px auto 0 auto;
-      }
-      .pwCanvasPaint canvas:first-child {
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
-        -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
-      }
+		<style>
+			body {
+				background-color: #efeeee;
+			}
+			.container {
+				width: 400px;
+				margin: 100px auto 0 auto;
+			}
+			.pwCanvasPaint canvas:first-child {
+				box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+				-webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+			}
 
-      .pwColorSelector {
-        list-style: none;
-      }
+			.pwColorSelector {
+				list-style: none;
+			}
 
-      .pwColor {
-        display: inline-block;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        margin-right: 5px;
-        border: 2px solid transparent;
-      }
-      .pwColor.active {
-        border: 2px solid #000;
-      }
-    </style>
-  </head>
-  <body>
+			.pwColor {
+				display: inline-block;
+				border-radius: 50%;
+				width: 30px;
+				height: 30px;
+				margin-right: 5px;
+				border: 2px solid transparent;
+			}
+			.pwColor.active {
+				border: 2px solid #000;
+			}
 
-    <div class="container">
-      <div pw-canvas options="{width: 400, height: 300, color: selectedColor, lineWidth: lineWidth}"></div>
-      <div pw-color-selector="['#000', '#00f', '#0f0', '#f00']" color="selectedColor"></div>
-      <input type="range" ng-model="lineWidth" max="50">
-      {{lineWidth}}
-    </div>
+			.undo {
+				margin-top: 20px;
+			}
+
+			.undo > button {
+				background-color: orange;
+				color: white;
+				border: none;
+				padding: 10px;
+				border-radius: 4px;
+			}
+
+			.undo > button[disabled] {
+				background-color: #aaa;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="container" ng-controller="MainController as ctrl">
+
+			<div pw-canvas
+				   version="ctrl.version"
+				   options="{undo: true, width: 400, height: 300, color: selectedColor, lineWidth: lineWidth}"></div>
+
+			<div pw-color-selector="['#000', '#00f', '#0f0', '#f00']" color="selectedColor"></div>
+
+			<input type="range" ng-model="lineWidth" max="50">
+			{{lineWidth}}
+
+			<div class="undo">
+				<button ng-click="ctrl.undo()"
+							  ng-disabled="ctrl.version < 1">Undo (Version {{ctrl.version}})</button>
+			</div>
+		</div>
 
 
-    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="js/pwCanvasModule.js"></script>
-    <script type="text/javascript" src="js/pwCanvas.js"></script>
-    <script type="text/javascript" src="js/pwColorSelector.js"></script>
+		<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+		<script type="text/javascript" src="js/pwCanvasModule.js"></script>
+		<script type="text/javascript" src="js/pwCanvas.js"></script>
+		<script type="text/javascript" src="js/pwColorSelector.js"></script>
+		<script type="text/javascript">
+			angular.module('pw.canvas-painter').controller('MainController', function($scope){
+				this.undo = function(){
+					this.version--;
+				};
+			});
+		</script>
 
-  </body>
+	</body>
 </html>

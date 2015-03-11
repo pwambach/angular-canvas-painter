@@ -5,7 +5,8 @@ angular.module('pw.canvas-painter')
     return {
       restrict: 'AE',
       scope: {
-        options: '='
+        options: '=',
+        version: '='
       },
       templateUrl: '../templates/canvas.html',
       link: function postLink(scope) {
@@ -26,6 +27,29 @@ angular.module('pw.canvas-painter')
         options.undoEnabled = options.undoEnabled || false;
         options.opacity = options.opacity || 0.9;
         options.lineWidth = options.lineWidth || 1;
+        options.undo = options.undo || false;
+
+        //undo
+        if(options.undo){
+					var undoCache = [];
+					scope.$watch(function(){
+						return undoCache.length;
+					}, function(newVal){
+        		scope.version = newVal;
+        	});
+
+        	scope.$watch('version', function(newVal){
+        		if(newVal < 0){
+        			scope.version = 0;
+        			return;
+        		}
+        		if(newVal >= undoCache.length){
+        			scope.version = undoCache.length;
+        			return;
+        		}
+        		undo(newVal);
+        	});
+        }
 
         //create canvas and context
         var canvas = document.getElementById('pwCanvasMain');
@@ -136,17 +160,22 @@ angular.module('pw.canvas-painter')
           ctxTmp.stroke();
         };
 
+        var copyTmpImage = function(){
+        	if(options.undo){
+        		scope.$apply(function(){
+	        		undoCache.push(ctx.getImageData(0, 0, canvasTmp.width, canvasTmp.height));
+	        		if(angular.isNumber(options.undo) && options.undo > 0){
+	        			undoCache = undoCache.slice(-1 * options.undo);
+	        		}
+        		});
+        	}
+        	canvasTmp.removeEventListener(PAINT_MOVE, paint, false);
+          ctx.drawImage(canvasTmp, 0, 0);
+          ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
+          ppts = [];
+        };
 
         var initListeners = function(){
-          if(!isTouch){
-            window.addEventListener(PAINT_END, function(){
-              canvasTmp.removeEventListener(PAINT_MOVE, paint, false);
-              ctx.drawImage(canvasTmp, 0, 0);
-              ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
-              ppts = [];
-            }, false);
-          }
-
           canvasTmp.addEventListener(PAINT_START, function(e) {
             e.preventDefault();
             canvasTmp.addEventListener(PAINT_MOVE, paint, false);
@@ -157,15 +186,19 @@ angular.module('pw.canvas-painter')
 
             paint();
           }, false);
-
-          canvasTmp.addEventListener(PAINT_END, function() {
-            canvasTmp.removeEventListener(PAINT_MOVE, paint, false);
-            ctx.drawImage(canvasTmp, 0, 0);
-            ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
-            ppts = [];
-          }, false);
+          canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
         };
         initListeners();
-      }
+
+
+
+        var undo = function(version){
+					if(undoCache.length > 0){
+						ctx.putImageData(undoCache[version], 0, 0);
+						undoCache = undoCache.slice(0,version);
+					}
+	      };
+
+	    }
     };
   });
