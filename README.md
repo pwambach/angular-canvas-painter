@@ -28,6 +28,7 @@ Angular.js directive to paint on a canvas on desktop or touch devices
   lineWidth: 1, //px
   opacity: 0.9, //0-1
   undo: false // boolean or a number of versions to keep in memory
+  imageSrc: 'images/example.jpg' // loads the specified image and sets it as background image
 }
 ```
 
