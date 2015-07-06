@@ -9,7 +9,7 @@ angular.module('pw.canvas-painter')
 				version: '='
 			},
 			templateUrl: '../templates/canvas.html',
-			link: function postLink(scope) {
+			link: function postLink(scope, elm) {
 
 				var isTouch = !!('ontouchstart' in window);
 				var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
@@ -20,6 +20,8 @@ angular.module('pw.canvas-painter')
 
 				//set default options
 				var options = scope.options;
+				options.canvasId = options.customCanvasId || 'pwCanvasMain';
+				options.tmpCanvasId = options.customCanvasId ? (options.canvasId + 'Tmp') : 'pwCanvasTmp';
 				options.width = options.width || 400;
 				options.height = options.height || 300;
 				options.backgroundColor = options.backgroundColor || '#fff';
@@ -62,8 +64,17 @@ angular.module('pw.canvas-painter')
 				}
 
 				//create canvas and context
-				var canvas = document.getElementById('pwCanvasMain');
-				var canvasTmp = document.getElementById('pwCanvasTmp');
+				var canvas = document.createElement("canvas");
+				canvas.id = options.canvasId;
+				var canvasTmp = document.createElement("canvas");
+				canvasTmp.id = options.tmpCanvasId;
+				angular.element(canvasTmp).css({
+					position: 'absolute',
+					top: 0,
+					left: 0
+				});
+				elm.find('div').append(canvas);
+				elm.find('div').append(canvasTmp);
 				var ctx = canvas.getContext('2d');
 				var ctxTmp = canvasTmp.getContext('2d');
 

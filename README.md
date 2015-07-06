@@ -28,7 +28,8 @@ Angular.js directive to paint on a canvas on desktop or touch devices
   lineWidth: 1, //px
   opacity: 0.9, //0-1
   undo: false // boolean or a number of versions to keep in memory
-  imageSrc: 'images/example.jpg' // loads the specified image and sets it as background image
+  imageSrc: 'images/example.jpg', // loads the specified image and sets it as background image,
+  customCanvasId: 'myCustomId' // define a custom value for the id attribute of the canvas element (default: 'pwCanvasMain')
 }
 ```
 
@@ -39,7 +40,7 @@ To enable the undo function set `undo: true` in the options and provide a `versi
 ```
 The version attribute will always be set to the amount of available versions in memory. To undo a stroke just decrease the version number in your surrounding controller e.g. `model.version = model.version - 1`. To jump back 3 versions set `model.version = model.version - 3`.
 
-You can set a maximum number of saved versions to prevent too much memory consumption by setting a number instead of `true` in the options, e.g. `{undo: 20}` 
+You can set a maximum number of saved versions to prevent too much memory consumption by setting a number instead of `true` in the options, e.g. `{undo: 20}`
 
 ####pwColorSelector
 ```html
