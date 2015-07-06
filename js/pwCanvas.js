@@ -64,9 +64,9 @@ angular.module('pw.canvas-painter')
 				}
 
 				//create canvas and context
-				var canvas = document.createElement("canvas");
+				var canvas = document.createElement('canvas');
 				canvas.id = options.canvasId;
-				var canvasTmp = document.createElement("canvas");
+				var canvasTmp = document.createElement('canvas');
 				canvasTmp.id = options.tmpCanvasId;
 				angular.element(canvasTmp).css({
 					position: 'absolute',

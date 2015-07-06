@@ -1,6 +1,6 @@
 {
   "name": "angular-canvas-painter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Angular.js directive to paint on a canvas on desktop or touch devices",
   "main": "dist/canvasPaint.js",
   "scripts": {
