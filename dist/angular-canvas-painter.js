@@ -1,5 +1,5 @@
 /*!
- * angular-canvas-painter - v0.3.1
+ * angular-canvas-painter - v0.4.0
  *
  * Copyright (c) 2015, Philipp Wambach
  * Released under the MIT license.
