@@ -45,7 +45,6 @@ angular.module('pw.canvas-painter')
 			link: function postLink(scope, elm) {
 
 				var isTouch = !!('ontouchstart' in window);
-				var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 
 				var PAINT_START = isTouch ? 'touchstart' : 'mousedown';
 				var PAINT_MOVE = isTouch ? 'touchmove' : 'mousemove';
@@ -157,16 +156,27 @@ angular.module('pw.canvas-painter')
 				 ctxTmp.clearRect(0, 0, canvasTmp.width, canvasTmp.height);
 				 };*/
 
+			 var getOffset = function( elem ) {
+					 var offsetTop = 0;
+			     var offsetLeft = 0;
+			     do {
+			       if ( !isNaN( elem.offsetLeft ) )
+			       {
+								 offsetTop += elem.offsetTop;
+			           offsetLeft += elem.offsetLeft;
+			       }
+						 elem = elem.offsetParent;
+			     } while( elem );
+			     return {
+							left:offsetLeft,
+						 	top: offsetTop
+					 };
+			 };
 
 				var setPointFromEvent = function(point, e) {
 					if(isTouch){
-						if(iOS){
-							point.x = e.layerX;
-							point.y = e.layerY;
-						} else {
-							point.x = e.changedTouches[0].clientX - e.target.offsetParent.offsetLeft;
-							point.y = e.changedTouches[0].clientY - e.target.offsetParent.offsetTop;
-						}
+						point.x = e.changedTouches[0].pageX - getOffset(e.target).left;
+						point.y = e.changedTouches[0].pageY - getOffset(e.target).top;
 					} else {
 						point.x = e.offsetX !== undefined ? e.offsetX : e.layerX;
 						point.y = e.offsetY !== undefined ? e.offsetY : e.layerY;

@@ -1,13 +1,25 @@
 {
   "name": "angular-canvas-painter",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Angular.js directive to paint on a canvas on desktop or touch devices",
   "main": "dist/canvasPaint.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Philipp Wambach",
+  "keywords": [
+    "angular",
+    "canvas",
+    "directive",
+    "paint",
+    "sketch",
+    "draw",
+    "touch"
+  ],
   "license": "MIT",
+  "dependencies": {
+    "angular": "~1.4.1"
+  },
   "devDependencies": {
     "better-assert": "^1.0.1",
     "gulp": "^3.6.2",
@@ -22,5 +34,13 @@
     "gulp-replace": "~0.5.0",
     "gulp-uglify": "^0.3.1",
     "mkdirp": "^0.3.5"
+  },
+  "bugs": {
+    "url": "https://github.com/pwambach/angular-canvas-painter/issues"
+  },
+  "homepage": "https://github.com/pwambach/angular-canvas-painter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pwambach/angular-canvas-painter.git"
   }
 }
