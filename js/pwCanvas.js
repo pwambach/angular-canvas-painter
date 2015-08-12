@@ -76,8 +76,9 @@
 
                         scope.$watch('version', function (newVal) {
                             if(newVal === 'reset'){
+                                undoCache = [];
                                 init();
-                            } else {
+                            } else if(undoCache.length !== 0) {
                                 if (newVal < 0) {
                                     scope.version = 0;
                                     return;
@@ -118,10 +119,10 @@
                     ctx.fillStyle = options.backgroundColor;
                     ctxTmp.globalAlpha = options.opacity;
                     function init() {
-                        scope.version = 0;
                         //set context style
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                         ctxTmp.lineJoin = ctxTmp.lineCap = 'round';
+                        scope.version = 0;
                     }
                     init();
 
