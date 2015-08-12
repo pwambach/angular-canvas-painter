@@ -1,9 +1,3 @@
-/*!
- * angular-canvas-painter - v0.4.0
- *
- * Copyright (c) 2015, Philipp Wambach
- * Released under the MIT license.
- */
 'use strict';
 (function (window) {
     angular.module('pw.canvas-painter', []);
