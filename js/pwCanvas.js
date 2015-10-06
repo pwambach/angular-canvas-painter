@@ -218,6 +218,11 @@ angular.module('pw.canvas-painter')
 						paint();
 					}, false);
 					canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
+					canvasTmp.addEventListener('mouseleave', function(e){
+						if(e.which === 1){
+							copyTmpImage(e);
+						}
+					}, false);
 				};
 				initListeners();
 
