@@ -1,3 +1,11 @@
+<a name="0.5.0"></a>
+# 0.5.0 (2015-10-12)
+
+## Bug fixes
+
+- Fix behaviour when mouse enters/leaves canvas (thanks @stevenlundy) ([#14](https://github.com/pwambach/angular-canvas-painter/issues/14) 
+
+
 <a name="0.4.0"></a>
 # 0.4.0 (2015-07-16)
 

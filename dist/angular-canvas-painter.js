@@ -239,18 +239,35 @@ angular.module('pw.canvas-painter')
 					ppts = [];
 				};
 
+				var startTmpImage = function(e){
+					e.preventDefault();
+					canvasTmp.addEventListener(PAINT_MOVE, paint, false);
+
+					setPointFromEvent(point, e);
+					ppts.push({x: point.x, y: point.y});
+					ppts.push({x: point.x, y: point.y});
+
+					paint();
+				};
+
 				var initListeners = function(){
-					canvasTmp.addEventListener(PAINT_START, function(e) {
-						e.preventDefault();
-						canvasTmp.addEventListener(PAINT_MOVE, paint, false);
-
-						setPointFromEvent(point, e);
-						ppts.push({x: point.x, y: point.y});
-						ppts.push({x: point.x, y: point.y});
-
-						paint();
-					}, false);
+					canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
 					canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
+
+					if(!isTouch){
+						canvasTmp.addEventListener('mouseenter', function(e){
+							// If the mouse is down when it enters the canvas, start a path
+							if(e.which === 1){
+								startTmpImage(e);
+							}
+						}, false);
+						canvasTmp.addEventListener('mouseleave', function(e){
+							// If the mouse is down when it leaves the canvas, end the path
+							if(e.which === 1){
+								copyTmpImage(e);
+							}
+						}, false);
+					}
 				};
 				initListeners();
 
