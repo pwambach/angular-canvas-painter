@@ -12,12 +12,10 @@ var minifyHtml = require('gulp-minify-html');
 var ngHtml2js = require('gulp-ng-html2js');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
-var replace = require('gulp-replace');
-
-
+var clean = require('gulp-clean');
 var pkg = require('./package.json');
-var module_name = 'pw.canvas-painter';
 
+var module_name = 'pw.canvas-painter';
 
 mkdirp('./dist');
 mkdirp('./.tmp');
@@ -58,7 +56,7 @@ gulp.task('partials', function() {
  * Build task
  */
 
-gulp.task('build', function() {
+gulp.task('build', ['lint'], function() {
 	mkdirp('./dist');
 	gulp.src(['./.tmp/templates.js', 'js/pwCanvas.js', 'js/pwColorSelector.js'])
 	  .pipe(replace(/'use strict';/g, ''))
@@ -72,7 +70,7 @@ gulp.task('build', function() {
 /**
  * Min task
  */
-gulp.task('min', function() {
+gulp.task('min', ['build'], function() {
 	gulp.src('./dist/' + pkg.name + '.js')
 		.pipe(ugifyjs())
 		.pipe(rename(pkg.name + '.min.js'))
@@ -91,6 +89,15 @@ gulp.task('lint', function() {
 
 
 /**
+ * Clean tmp folder
+ */
+gulp.task('clean', ['build'], function () {
+	return gulp.src('./.tmp', {read: false})
+  	.pipe(clean());
+});
+
+
+/**
  * Register tasks
  */
-gulp.task('default', ['lint', 'partials', 'build', 'min']);
+gulp.task('default', ['lint', 'partials', 'build', 'clean', 'min']);
