@@ -1,87 +1,91 @@
 <!doctype html>
 <html class="no-js" ng-app="pw.canvas-painter">
-	<head>
-		<meta charset="utf-8">
-		<title>AngularJS CanvasPainter</title>
-		<meta name="viewport" content="width=device-width, height=device-height">
+  <head>
+    <meta charset="utf-8">
+    <title>AngularJS CanvasPainter</title>
+    <meta name="viewport" content="width=device-width, height=device-height">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-45381222-3', 'auto');
+      ga('send', 'pageview');
+    </script>
 
-		<style>
-			body {
-				background-color: #efeeee;
-			}
-			.container {
-				width: 400px;
-				margin: 100px auto 0 auto;
-			}
-			.pwCanvasPaint canvas:first-child {
-				box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
-				-webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
-			}
+    <style>
+      body {
+        background-color: #efeeee;
+      }
+      .container {
+        width: 400px;
+        margin: 100px auto 0 auto;
+      }
+      .pwCanvasPaint canvas:first-child {
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+        -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+      }
+      .pwColorSelector {
+        list-style: none;
+      }
+      .pwColor {
+        display: inline-block;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+        border: 2px solid transparent;
+      }
+      .pwColor.active {
+        transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        box-shadow: 2px 3px 2px rgba(0,0,0,0.2);
+        -webkit-box-shadow: 2px 3px 2px rgba(0,0,0,0.2);
+      }
+      .lineWidthSelector {
+        width: 100%;
+      }
+      .undo {
+        margin-top: 20px;
+      }
+      .undo > button {
+        background-color: orange;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .undo > button[disabled] {
+        background-color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
 
-			.pwColorSelector {
-				list-style: none;
-			}
+    <a href="https://github.com/pwambach/angular-canvas-painter">View code</a>
 
-			.pwColor {
-				display: inline-block;
-				border-radius: 50%;
-				width: 30px;
-				height: 30px;
-				margin-right: 5px;
-				border: 2px solid transparent;
-			}
-			.pwColor.active {
-				border: 2px solid #000;
-			}
+    <div class="container" ng-controller="MainController as ctrl">
+      <div pw-canvas
+           version="ctrl.version"
+           options="{undo: true, width: 400, height: 300, color: selectedColor, lineWidth: selectedLineWidth}"></div>
+      <div pw-color-selector="['#000', '#9CB199', '#CF3759', '#485247', '#E77547', '#D38E47', '#0A6A74', '#153974']" color="selectedColor"></div>
+      <input type="range" min="1" max="50" ng-model="selectedLineWidth" class="lineWidthSelector">{{selectedLineWidth}}
 
-			.undo {
-				margin-top: 20px;
-			}
+      <div class="undo">
+        <button ng-click="ctrl.undo()"
+                ng-disabled="ctrl.version < 1">Undo (Version {{ctrl.version}})</button>
+      </div>
+    </div>
 
-			.undo > button {
-				background-color: orange;
-				color: white;
-				border: none;
-				padding: 10px;
-				border-radius: 4px;
-			}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script type="text/javascript" src="dist/angular-canvas-painter.min.js"></script>
 
-			.undo > button[disabled] {
-				background-color: #aaa;
-			}
-		</style>
-	</head>
-	<body>
-
-		<div class="container" ng-controller="MainController as ctrl">
-
-			<div pw-canvas
-				   version="ctrl.version"
-				   options="{undo: true, width: 400, height: 300, color: selectedColor, lineWidth: lineWidth}"></div>
-
-			<div pw-color-selector="['#000', '#00f', '#0f0', '#f00']" color="selectedColor"></div>
-
-			<input type="range" ng-model="lineWidth" max="50">
-			{{lineWidth}}
-
-			<div class="undo">
-				<button ng-click="ctrl.undo()"
-							  ng-disabled="ctrl.version < 1">Undo (Version {{ctrl.version}})</button>
-			</div>
-		</div>
-
-
-		<script type="text/javascript" src="bower_components/angular/angular.js"></script>
-		<script type="text/javascript" src="js/pwCanvasModule.js"></script>
-		<script type="text/javascript" src="js/pwCanvas.js"></script>
-		<script type="text/javascript" src="js/pwColorSelector.js"></script>
-		<script type="text/javascript">
-			angular.module('pw.canvas-painter').controller('MainController', function($scope){
-				this.undo = function(){
-					this.version--;
-				};
-			});
-		</script>
-
-	</body>
+    <script type="text/javascript">
+      angular.module('pw.canvas-painter').controller('MainController', function($scope){
+        this.undo = function(){
+          this.version--;
+        };
+      });
+    </script>
+  </body>
 </html>
