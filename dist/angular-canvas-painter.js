@@ -1,5 +1,5 @@
 /*!
- * angular-canvas-painter - v0.5.1
+ * angular-canvas-painter - v0.5.2
  *
  * Copyright (c) 2015, Philipp Wambach
  * Released under the MIT license.
@@ -7,6 +7,30 @@
 'use strict';
 (function(window) {
 angular.module('pw.canvas-painter', []);
+(function(module) {
+try {
+  module = angular.module('pw.canvas-painter');
+} catch (e) {
+  module = angular.module('pw.canvas-painter', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('../templates/canvas.html',
+    '<div class="pwCanvasPaint" style="position:relative"></div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('pw.canvas-painter');
+} catch (e) {
+  module = angular.module('pw.canvas-painter', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('../templates/color-selector.html',
+    '<ul class="pwColorSelector"><li ng-repeat="color in colorList track by $index" class="pwColor" ng-class="{\'active\': (selectedColor === color)}" ng-style="{\'background-color\':color}" ng-click="setColor(color)"></li></ul>');
+}]);
+})();
+
 
 
 angular.module('pw.canvas-painter')

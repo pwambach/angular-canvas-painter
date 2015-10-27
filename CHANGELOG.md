@@ -1,9 +1,19 @@
+<a name="0.5.2"></a>
+# 0.5.2 (2015-10-27)
+
+## Bug fixes
+
+- Fix bug in build process
+- Change angular to peerDependency
+- Fix package.json main attribute (thanks @EnguGh) ([#17](https://github.com/pwambach/angular-canvas-painter/pull/17))
+
+
 <a name="0.5.1"></a>
 # 0.5.1 (2015-10-22)
 
 ## Bug fixes
 
-- Fix concurrency bug in build process (thanks @Brakebein ) ([#16])(https://github.com/pwambach/angular-canvas-painter/issues/16)
+- Fix concurrency bug in build process (thanks @Brakebein ) ([#16](https://github.com/pwambach/angular-canvas-painter/issues/16))
 
 
 <a name="0.5.0"></a>
@@ -11,7 +21,7 @@
 
 ## Bug fixes
 
-- Fix behaviour when mouse enters/leaves canvas (thanks @stevenlundy) ([#14](https://github.com/pwambach/angular-canvas-painter/issues/14)
+- Fix behaviour when mouse enters/leaves canvas (thanks @stevenlundy) ([#14](https://github.com/pwambach/angular-canvas-painter/issues/14))
 
 
 <a name="0.4.0"></a>
