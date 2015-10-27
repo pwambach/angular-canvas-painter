@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "angular": "~1.3"
+    "angular": ">= 1.3.10"
   },
   "devDependencies": {
     "better-assert": "^1.0.1",
