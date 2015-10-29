@@ -224,13 +224,13 @@ angular.module('pw.canvas-painter')
 					if(!isTouch){
 						canvasTmp.addEventListener('mouseenter', function(e){
 							// If the mouse is down when it enters the canvas, start a path
-							if(e.which === 1){
+							if(e.buttons === 1 && e.button === 0) {
 								startTmpImage(e);
 							}
 						}, false);
 						canvasTmp.addEventListener('mouseleave', function(e){
 							// If the mouse is down when it leaves the canvas, end the path
-							if(e.which === 1){
+							if(e.buttons === 1 && e.button === 0) {
 								copyTmpImage(e);
 							}
 						}, false);
