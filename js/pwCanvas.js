@@ -217,28 +217,44 @@ angular.module('pw.canvas-painter')
 					paint();
 				};
 
-				var initListeners = function(){
-					canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
-					canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
+                                function initListeners(){
+                                    canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
+                                    canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
+    
+                                    if(!isTouch){
+                                        var MOUSE_DOWN;
+    
+                                        document.body.addEventListener('mousedown', mousedown);
+                                        document.body.addEventListener('mouseup', mouseup);
+    
+                                        canvasTmp.addEventListener('mouseenter', mouseenter);
+                                        canvasTmp.addEventListener('mouseleave', mouseleave);
+                                    }
+    
+                                    function mousedown() {
+                                        MOUSE_DOWN = true;
+                                    }
+    
+                                    function mouseup() {
+                                        MOUSE_DOWN = false;
+                                    }
+    
+                                    function mouseenter(e){
+                                        // If the mouse is down when it enters the canvas, start a path
+                                        if(MOUSE_DOWN){
+                                            startTmpImage(e);
+                                        }
+                                    }
+    
+                                    function mouseleave(e){
+                                        // If the mouse is down when it leaves the canvas, end the path
+                                        if(MOUSE_DOWN){
+                                            copyTmpImage(e);
+                                        }
+                                    }
+                                }
 
-					if(!isTouch){
-						canvasTmp.addEventListener('mouseenter', function(e){
-							// If the mouse is down when it enters the canvas, start a path
-							if(e.buttons === 1 && e.button === 0) {
-								startTmpImage(e);
-							}
-						}, false);
-						canvasTmp.addEventListener('mouseleave', function(e){
-							// If the mouse is down when it leaves the canvas, end the path
-							if(e.buttons === 1 && e.button === 0) {
-								copyTmpImage(e);
-							}
-						}, false);
-					}
-				};
 				initListeners();
-
-
 
 				var undo = function(version){
 					if(undoCache.length > 0){
