@@ -227,6 +227,8 @@ angular.module('pw.canvas-painter')
                     document.body.addEventListener('mousedown', mousedown);
                     document.body.addEventListener('mouseup', mouseup);
 
+                    scope.$on('$destroy', removeEventListeners);
+
                     canvasTmp.addEventListener('mouseenter', mouseenter);
                     canvasTmp.addEventListener('mouseleave', mouseleave);
                 }
@@ -237,6 +239,11 @@ angular.module('pw.canvas-painter')
 
                 function mouseup() {
                     MOUSE_DOWN = false;
+                }
+
+                function removeEventListeners() {
+                    document.body.removeEventListener('mousedown', mousedown);
+                    document.body.removeEventListener('mouseup', mouseup);
                 }
 
                 function mouseenter(e){
