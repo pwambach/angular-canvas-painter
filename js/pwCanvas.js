@@ -217,28 +217,51 @@ angular.module('pw.canvas-painter')
 					paint();
 				};
 
-				var initListeners = function(){
-					canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
-					canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
+            function initListeners(){
+                canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
+                canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
 
-					if(!isTouch){
-						canvasTmp.addEventListener('mouseenter', function(e){
-							// If the mouse is down when it enters the canvas, start a path
-							if(e.which === 1){
-								startTmpImage(e);
-							}
-						}, false);
-						canvasTmp.addEventListener('mouseleave', function(e){
-							// If the mouse is down when it leaves the canvas, end the path
-							if(e.which === 1){
-								copyTmpImage(e);
-							}
-						}, false);
-					}
-				};
+                if(!isTouch){
+                    var MOUSE_DOWN;
+
+                    document.body.addEventListener('mousedown', mousedown);
+                    document.body.addEventListener('mouseup', mouseup);
+
+                    scope.$on('$destroy', removeEventListeners);
+
+                    canvasTmp.addEventListener('mouseenter', mouseenter);
+                    canvasTmp.addEventListener('mouseleave', mouseleave);
+                }
+
+                function mousedown() {
+                    MOUSE_DOWN = true;
+                }
+
+                function mouseup() {
+                    MOUSE_DOWN = false;
+                }
+
+                function removeEventListeners() {
+                    document.body.removeEventListener('mousedown', mousedown);
+                    document.body.removeEventListener('mouseup', mouseup);
+                }
+
+                function mouseenter(e){
+                    // If the mouse is down when it enters the canvas, start a path
+                    if(MOUSE_DOWN){
+                        startTmpImage(e);
+                    }
+                }
+
+                function mouseleave(e){
+                    // If the mouse is down when it leaves the canvas, end the path
+                    if(MOUSE_DOWN){
+                        copyTmpImage(e);
+                    }
+                }
+            }
+
 				initListeners();
-
-
 
 				var undo = function(version){
 					if(undoCache.length > 0){
