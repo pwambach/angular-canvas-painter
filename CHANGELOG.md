@@ -1,3 +1,13 @@
+<a name="0.5.3"></a>
+# 0.5.3 (2015-11-09)
+
+## Bug fixes
+
+- Fix mouseenter/leave problems in firefox (thanks @w3sami)
+ ([#17](https://github.com/pwambach/angular-canvas-painter/pull/20))
+- Convert tabs to spaces
+
+
 <a name="0.5.2"></a>
 # 0.5.2 (2015-10-27)
 
