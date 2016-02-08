@@ -1,7 +1,7 @@
 /*!
- * angular-canvas-painter - v0.5.2
+ * angular-canvas-painter - v0.5.3
  *
- * Copyright (c) 2015, Philipp Wambach
+ * Copyright (c) 2016, Philipp Wambach
  * Released under the MIT license.
  */
 'use strict';
@@ -34,7 +34,7 @@ module.run(['$templateCache', function($templateCache) {
 
 
 angular.module('pw.canvas-painter')
-  .directive('pwCanvas', function() {
+  .directive('pwCanvas', ["$timeout", function ($timeout) {
     return {
       restrict: 'AE',
       scope: {
@@ -63,37 +63,7 @@ angular.module('pw.canvas-painter')
         options.lineWidth = options.lineWidth || 1;
         options.undo = options.undo || false;
         options.imageSrc = options.imageSrc || false;
-
-        // background image
-        if (options.imageSrc) {
-          var image = new Image();
-          image.onload = function() {
-            ctx.drawImage(this, 0, 0);
-          };
-          image.src = options.imageSrc;
-        }
-
-        //undo
-        if (options.undo) {
-          var undoCache = [];
-          scope.$watch(function() {
-            return undoCache.length;
-          }, function(newVal) {
-            scope.version = newVal;
-          });
-
-          scope.$watch('version', function(newVal) {
-            if (newVal < 0) {
-              scope.version = 0;
-              return;
-            }
-            if (newVal >= undoCache.length) {
-              scope.version = undoCache.length;
-              return;
-            }
-            undo(newVal);
-          });
-        }
+        options.resize = options.resize || false;
 
         //create canvas and context
         var canvas = document.createElement('canvas');
@@ -117,21 +87,41 @@ angular.module('pw.canvas-painter')
         };
         var ppts = [];
 
-        //set canvas size
-        canvas.width = canvasTmp.width = options.width;
-        canvas.height = canvasTmp.height = options.height;
+        var initCanvas = function () {
+          //set canvas size
+          if (options.resize) {
+            options.height = elm.height();
+            options.width = elm.width();
+          }
 
-        //set context style
-        ctx.fillStyle = options.backgroundColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctxTmp.globalAlpha = options.opacity;
-        ctxTmp.lineJoin = ctxTmp.lineCap = 'round';
-        ctxTmp.lineWidth = 10;
-        ctxTmp.strokeStyle = options.color;
+          canvas.width = canvasTmp.width = options.width;
+          canvas.height = canvasTmp.height = options.height;
 
+          // background image
+          if (options.imageSrc) {
+            var image = new Image();
+            image.onload = function () {
+              ctx.drawImage(this, 0, 0);
+            };
+            image.src = options.imageSrc;
+          }
+
+          //set context style
+          ctx.fillStyle = options.backgroundColor;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctxTmp.globalAlpha = options.opacity;
+          ctxTmp.lineJoin = ctxTmp.lineCap = 'round';
+          ctxTmp.lineWidth = options.lineWidth;
+          ctxTmp.strokeStyle = options.color;
+        };
+
+        $timeout(function () {
+          //init the canvas when the DOM was rendered for correct sizing.
+          initCanvas();
+        });
 
         //Watch options
-        scope.$watch('options.lineWidth', function(newValue) {
+        scope.$watch('options.lineWidth', function (newValue) {
           if (typeof newValue === 'string') {
             newValue = parseInt(newValue, 10);
           }
@@ -140,20 +130,20 @@ angular.module('pw.canvas-painter')
           }
         });
 
-        scope.$watch('options.color', function(newValue) {
+        scope.$watch('options.color', function (newValue) {
           if (newValue) {
             //ctx.fillStyle = newValue;
             ctxTmp.strokeStyle = ctxTmp.fillStyle = newValue;
           }
         });
 
-        scope.$watch('options.opacity', function(newValue) {
+        scope.$watch('options.opacity', function (newValue) {
           if (newValue) {
             ctxTmp.globalAlpha = newValue;
           }
         });
 
-        var getOffset = function(elem) {
+        var getOffset = function (elem) {
           var offsetTop = 0;
           var offsetLeft = 0;
           do {
@@ -169,7 +159,7 @@ angular.module('pw.canvas-painter')
           };
         };
 
-        var setPointFromEvent = function(point, e) {
+        var setPointFromEvent = function (point, e) {
           if (isTouch) {
             point.x = e.changedTouches[0].pageX - getOffset(e.target).left;
             point.y = e.changedTouches[0].pageY - getOffset(e.target).top;
@@ -179,8 +169,7 @@ angular.module('pw.canvas-painter')
           }
         };
 
-
-        var paint = function(e) {
+        var paint = function (e) {
           if (e) {
             e.preventDefault();
             setPointFromEvent(point, e);
@@ -223,9 +212,9 @@ angular.module('pw.canvas-painter')
           ctxTmp.stroke();
         };
 
-        var copyTmpImage = function() {
+        var copyTmpImage = function () {
           if (options.undo) {
-            scope.$apply(function() {
+            scope.$apply(function () {
               undoCache.push(ctx.getImageData(0, 0, canvasTmp.width, canvasTmp.height));
               if (angular.isNumber(options.undo) && options.undo > 0) {
                 undoCache = undoCache.slice(-1 * options.undo);
@@ -238,7 +227,7 @@ angular.module('pw.canvas-painter')
           ppts = [];
         };
 
-        var startTmpImage = function(e) {
+        var startTmpImage = function (e) {
           e.preventDefault();
           canvasTmp.addEventListener(PAINT_MOVE, paint, false);
 
@@ -255,7 +244,7 @@ angular.module('pw.canvas-painter')
           paint();
         };
 
-        var initListeners = function() {
+        var initListeners = function () {
           canvasTmp.addEventListener(PAINT_START, startTmpImage, false);
           canvasTmp.addEventListener(PAINT_END, copyTmpImage, false);
 
@@ -299,17 +288,40 @@ angular.module('pw.canvas-painter')
           }
         };
 
-        var undo = function(version) {
+
+        //undo
+        var undo = function (version) {
           if (undoCache.length > 0) {
             ctx.putImageData(undoCache[version], 0, 0);
             undoCache = undoCache.slice(0, version);
           }
         };
 
+        if (options.undo) {
+          var undoCache = [];
+          scope.$watch(function () {
+            return undoCache.length;
+          }, function (newVal) {
+            scope.version = newVal;
+          });
+
+          scope.$watch('version', function (newVal) {
+            if (newVal < 0) {
+              scope.version = 0;
+              return;
+            }
+            if (newVal >= undoCache.length) {
+              scope.version = undoCache.length;
+              return;
+            }
+            undo(newVal);
+          });
+        }
+
         initListeners();
       }
     };
-  });
+  }]);
 
 
 
