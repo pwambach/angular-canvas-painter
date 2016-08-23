@@ -35,7 +35,7 @@ angular.module('pw.canvas-painter')
         if (options.imageSrc) {
           var image = new Image();
           image.onload = function() {
-            ctx.drawImage(this, 0, 0);
+            ctx.drawImage(this, 0, 0, options.width, options.height);
           };
           image.src = options.imageSrc;
         }
