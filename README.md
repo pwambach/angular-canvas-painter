@@ -1,6 +1,11 @@
 angular-canvas-painter
 ======================
 
+
+:warning: **This project is not under active development! PRs welcome!**
+
+
+
 Angular.js directive to paint on a canvas on desktop or touch devices
 
 [View Demo](http://pwambach.github.io/angular-canvas-painter/)
