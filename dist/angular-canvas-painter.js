@@ -1,7 +1,7 @@
 /*!
- * angular-canvas-painter - v0.5.3
+ * angular-canvas-painter - v0.6.1
  *
- * Copyright (c) 2016, Philipp Wambach
+ * Copyright (c) 2023, Philipp Wambach
  * Released under the MIT license.
  */
 'use strict';
@@ -144,18 +144,10 @@ angular.module('pw.canvas-painter')
         });
 
         var getOffset = function (elem) {
-          var offsetTop = 0;
-          var offsetLeft = 0;
-          do {
-            if (!isNaN(elem.offsetLeft)) {
-              offsetTop += elem.offsetTop;
-              offsetLeft += elem.offsetLeft;
-            }
-            elem = elem.offsetParent;
-          } while (elem);
+          var bbox = elem.getBoundingClientRect();
           return {
-            left: offsetLeft,
-            top: offsetTop
+            left: bbox.left,
+            top: bbox.top
           };
         };
 

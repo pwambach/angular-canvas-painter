@@ -111,18 +111,10 @@ angular.module('pw.canvas-painter')
         });
 
         var getOffset = function (elem) {
-          var offsetTop = 0;
-          var offsetLeft = 0;
-          do {
-            if (!isNaN(elem.offsetLeft)) {
-              offsetTop += elem.offsetTop;
-              offsetLeft += elem.offsetLeft;
-            }
-            elem = elem.offsetParent;
-          } while (elem);
+          var bbox = elem.getBoundingClientRect();
           return {
-            left: offsetLeft,
-            top: offsetTop
+            left: bbox.left,
+            top: bbox.top
           };
         };
 
